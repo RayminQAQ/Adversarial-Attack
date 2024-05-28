@@ -22,16 +22,14 @@ def loadDataset(dataset_root: str) -> ImageFolder:
     ])
     return ImageFolder(dataset_root, transform=_transform)
 
-def splitDataset(dataset, batch) -> tuple:
+def splitDataset(dataset) -> tuple:
     # Compute sizing
     train_size = int(0.8 * len(dataset))  
     test_size = len(dataset) - train_size
     
     # split
     train_set, test_set = random_split(dataset, [train_size, test_size])
-    train_loader = DataLoader(train_set, batch_size=batch, shuffle=True)
-    test_loader = DataLoader(test_set, batch_size=batch, shuffle=False)
-    return train_loader, test_loader
+    return train_set, test_set
 
 def makeModel(class_num, device):
     model = ConvNet(class_num)
@@ -204,7 +202,7 @@ def _drawHistogram(class_accuracies, path):
     plt.close()
     print(f"Class-wise accuracy histogram saved in {path}/class_accuracies_histogram.png")
 
-def main(dataPath, savedPath, batch_size, epoch_size):
+def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, target_label=0):
     # Initialize
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     history = {
@@ -217,12 +215,16 @@ def main(dataPath, savedPath, batch_size, epoch_size):
     
     # Load Data
     dataset = loadDataset(dataPath)
+    train_set, test_set = splitDataset(dataset)
     
     # Poison Attack
-    poison_labels(dataset, poison_fraction=0.1, target_label=0)
+    poison_labels(train_set, train_set.indices, poison_fraction=0.1, target_label=0)
+    print(f"==========================================================")
+    print(f"Modify index({poison_fraction * 100}%) into: {target_label}")
     
     # Load 
-    trainLoader, testLoader = splitDataset(dataset, batch_size)
+    trainLoader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+    testLoader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
     
     # Load Model
     model = makeModel(len(dataset.classes), DEVICE)
@@ -243,6 +245,9 @@ def main(dataPath, savedPath, batch_size, epoch_size):
 
         if round == epoch_size:
             histogram = _histogram
+            
+        print(f"==========================================================")
+        
 
     # save result
     if not os.path.isdir(savedPath):
@@ -257,6 +262,7 @@ if __name__ == '__main__':
     epoch_size = 2
     
     # For poison attack: poison_labels
+    poison_fraction = 0.1
+    target_label = 0
     
-    
-    main(dataPath, savedPath, batch_size, epoch_size)    
+    main(dataPath, savedPath, batch_size, epoch_size, poison_fraction, target_label)    
