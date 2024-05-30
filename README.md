@@ -48,8 +48,6 @@ This attack does not affect the training phase. The attacker's goal is to make t
 ### Poisoning Attack
 These attacks occur in the training phase of the machine learning model. The attacker injects malicious data (such as backdoors) into the training dataset, causing the model to make incorrect predictions when encountering certain types of inputs in the future.
 
-If you want to use our dataset, please unzip: **dataset.zip**
-
 ## Result
 We can achieve accuracy of **above 90%** in 10 epochs, using those pipline.
 
