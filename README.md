@@ -13,6 +13,16 @@ Repository file structure:
     |-- README.md
 ```
 
+```
+Your image dataset structure should be like:
+    |-- directory
+        |-- label1
+        |-- label2
+        |-- label3
+            |-- images ...
+        |-- labeln
+```
+
 ## Pipeline
 There are three piplines can use for machine learning training and testing:
 1. **Basic_pipline.py**: Basic model without adding any Adversarial-Attack method.
