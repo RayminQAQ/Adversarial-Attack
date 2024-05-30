@@ -112,7 +112,7 @@ def test(model, test_loader, device) -> tuple:  # Returns overall accuracy and p
 
     return overall_accuracy, class_accuracies
 
-def saveResult(root_path, model, epoch, batch_size, history, histogram_info):
+def saveResult(root_path, model, epoch, batch_size, history, histogram_info, pois_fraction, noise):
     hisFolder = 1 # initial value for the history info directory
     savedDirPath = ""
     
@@ -135,6 +135,8 @@ def saveResult(root_path, model, epoch, batch_size, history, histogram_info):
         file.write(f"Train Accuracy: {history['history_train_acc']}\n")
         file.write(f"Train Loss: {history['history_train_loss']}\n")
         file.write(f"Test Accuracy: {history['history_test_acc']}\n")
+        file.write(f"Under Attack, Test Accuracy: {history['envasion_test_acc']}\n")
+        file.write(f"Poison_fraction = {pois_fraction}, noise = {noise}\n")
          
     # save model
     model_path = f"{savedDirPath}/model.pth"
@@ -212,7 +214,7 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
         "history_train_acc" : [],
         "history_train_loss" : [],
         "history_test_acc" : [],
-        # "history_test_loss" : [],
+        "envasion_test_acc" : [],
     }
     histogram = {}
     
@@ -221,12 +223,13 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
     train_set, test_set = splitDataset(dataset)
     
     # Envasion Attack
-    test_set = NoisyDataset(test_set, poison_fraction, noise_level)
+    distilled_test_set = NoisyDataset(test_set, poison_fraction, noise_level)
     
     # Load 
     trainLoader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
     testLoader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
-    
+    distilled_testLoader = DataLoader(distilled_test_set, batch_size=batch_size, shuffle=False)
+
     # Load Model
     model = makeModel(len(dataset.classes), DEVICE)
     
@@ -239,11 +242,13 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
     for round in range(1, epoch_size + 1):
         train_acc, train_loss = train(model, trainLoader, loss_fn, optimizer, round, DEVICE)
         test_acc, _histogram = test(model, testLoader, DEVICE)
+        envasion_acc, _histogram = test(model, distilled_testLoader, DEVICE)
+        
         # append
         history["history_train_acc"].append(train_acc)
         history["history_train_loss"].append(train_loss)
         history["history_test_acc"].append(test_acc)
-        # history["history_test_loss"].append(test_loss)
+        history["envasion_test_acc"].append(envasion_acc)
 
         if round == epoch_size:
             histogram = _histogram
@@ -255,13 +260,14 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
     if not os.path.isdir(savedPath):
         os.makedirs(savedPath)
     saveResult(root_path=savedPath, model=model, epoch=epoch_size, batch_size=batch_size, 
-               history=history, histogram_info=histogram)
+               history=history, histogram_info=histogram, 
+               pois_fraction=poison_fraction, noise=noise_level)
 
 if __name__ == '__main__':
     dataPath = "image_fromTA"
     savedPath = "result_EnvAttack"
     batch_size = 32
-    epoch_size = 10
+    epoch_size = 2
     
     # For poison attack: poison_labels
     poison_fraction = 0.1
