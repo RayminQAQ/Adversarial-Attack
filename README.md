@@ -34,6 +34,12 @@ There are three piplines can use for machine learning training and testing:
 2. **Poison_Attack.py**: Based on Basic_pipline and add Poison Attack measure.
 3. **Envasion_Attack.py**: Based on Basic_pipline and add Evasion Attack measure.
 
+To run those, you can type in terminal:
+```
+# you can select one to run
+$ python Basic_pipline.py Poison_Attack.py Envasion_Attack.py
+```
+
 ## Attack Strategies
 ### Evasion Attack
 This type of attack occurs in the inference phase of the machine learning model. The attacker modifies the input data by adding slight differences that are not easily detectable by humans and inputs it into the AI system, causing the system to misclassify it. 
