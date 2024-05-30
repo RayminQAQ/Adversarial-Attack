@@ -5,13 +5,13 @@ This project focuses on the development and analysis of Poison Attack and Evasio
 
 ```
 Repository file structure:
-    |-- Basic_pipline.py
-    |-- Poison_Attack.py
-    |-- Envasion_Attack.py
-    |-- model.py
-    |-- utils.py
-    |-- dataset.zip
-    |-- README.md
+|-- Basic_pipline.py
+|-- Poison_Attack.py
+|-- Envasion_Attack.py
+|-- model.py
+|-- utils.py
+|-- dataset.zip
+|-- README.md
 ```
 
 ```
