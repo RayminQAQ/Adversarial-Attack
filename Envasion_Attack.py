@@ -68,8 +68,6 @@ def train(model, train_loader, loss_fn, optimizer, idx, device) -> tuple:  # Ret
     # Calculate average loss and accuracy over an epoch
     average_loss = running_loss / len(train_loader)
     accuracy = 100 * correct / total
-
-    print(f"Epoch {idx}, Train Loss: {average_loss:.4f}, Accuracy: {accuracy:.2f}%")
     
     # Return the accuracy and average loss
     return accuracy, average_loss
@@ -105,7 +103,6 @@ def test(model, test_loader, device) -> tuple:  # Returns overall accuracy and p
 
     # Compute overall accuracy
     overall_accuracy = (correct / total) * 100
-    print(f"Test Accuracy: {overall_accuracy:.2f}%")
 
     # Compute per-class accuracies
     class_accuracies = {cls: 100 * class_correct[cls] / class_total[cls] for cls in class_correct if class_total[cls] > 0}
@@ -244,6 +241,11 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
         test_acc, _histogram = test(model, testLoader, DEVICE)
         envasion_acc, _histogram = test(model, distilled_testLoader, DEVICE)
         
+        # Print message
+        print(f"Epoch {round}, Train Loss: {train_loss:.4f}, Accuracy: {train_acc:.2f}%")
+        print(f"Test Accuracy: {test_acc:.2f}%")
+        print(f"Envasion Attack Accuracy: {envasion_acc:.2f}%")
+        
         # append
         history["history_train_acc"].append(train_acc)
         history["history_train_loss"].append(train_loss)
@@ -267,7 +269,7 @@ if __name__ == '__main__':
     dataPath = "image_fromTA"
     savedPath = "result_EnvAttack"
     batch_size = 32
-    epoch_size = 10
+    epoch_size = 20
     
     # For poison attack: poison_labels
     poison_fraction = 0.1
