@@ -46,6 +46,6 @@ These attacks occur in the training phase of the machine learning model. The att
 If you want to use our dataset, please unzip: **dataset.zip**
 
 ## Contributors
-- (2024, May) **[RayminQAQ](https://github.com/RayminQAQ)**
+- **[RayminQAQ](https://github.com/RayminQAQ)**
 
 If there's any question, contact: B11132009@mail.ntust.edu.tw
