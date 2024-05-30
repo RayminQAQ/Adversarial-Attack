@@ -10,7 +10,6 @@ Repository file structure:
 |-- Envasion_Attack.py
 |-- model.py
 |-- utils.py
-|-- dataset.zip
 |-- README.md
 ```
 
