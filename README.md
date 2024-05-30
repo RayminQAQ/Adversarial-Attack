@@ -11,11 +11,12 @@ Repository file structure:
     |-- model.py
     |-- utils.py
     |-- README.md
+    |-- Image_directory
 ```
 
 ```
 Your image dataset structure should be like:
-    |-- directory
+    |-- Image_directory
         |-- label1
             |-- images ...
         |-- label2
