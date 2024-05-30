@@ -37,6 +37,7 @@ There are three piplines can use for machine learning training and testing:
 ## Attack Strategies
 ### Evasion Attack
 This type of attack occurs in the inference phase of the machine learning model. The attacker modifies the input data by adding slight differences that are not easily detectable by humans and inputs it into the AI system, causing the system to misclassify it. 
+
 This attack does not affect the training phase. The attacker's goal is to make the machine learning model output incorrect results, while the input appears normal to human observers. This attack is commonly used in the field of image processing.
 
 ### Poisoning Attack
