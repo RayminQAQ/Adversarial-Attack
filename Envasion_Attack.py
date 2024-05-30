@@ -267,7 +267,7 @@ if __name__ == '__main__':
     dataPath = "image_fromTA"
     savedPath = "result_EnvAttack"
     batch_size = 32
-    epoch_size = 2
+    epoch_size = 10
     
     # For poison attack: poison_labels
     poison_fraction = 0.1
