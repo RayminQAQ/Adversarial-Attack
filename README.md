@@ -12,4 +12,6 @@ Repository file structure:
     |-- README.md
 ```
 ## Contributors
-- **[RayminQAQ](https://github.com/RayminQAQ)**:
+**[RayminQAQ](https://github.com/RayminQAQ)** 
+
+If there's any question, contact: B11132009@mail.ntust.edu.tw
