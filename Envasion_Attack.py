@@ -132,7 +132,10 @@ def saveResult(root_path, model, epoch, batch_size, history, histogram_info):
     with open(f"{savedDirPath}/hyperParameter.txt", 'w') as file:
         file.write(f"Epoch: {epoch}\n")
         file.write(f"Batch size: {batch_size}\n")
-        
+        file.write(f"Train Accuracy: {history['history_train_acc']}\n")
+        file.write(f"Train Loss: {history['history_train_loss']}\n")
+        file.write(f"Test Accuracy: {history['history_test_acc']}\n")
+         
     # save model
     model_path = f"{savedDirPath}/model.pth"
     torch.save(model, model_path)
