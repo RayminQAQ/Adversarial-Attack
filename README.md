@@ -46,7 +46,7 @@ These attacks occur in the training phase of the machine learning model. The att
 If you want to use our dataset, please unzip: **dataset.zip**
 
 ## Result
-We can achieve above 90% accuracy, using those pipline
+We can achieve above 90% accuracy with 10 epochs, using those pipline.
 
 ## Contributors
 - **[RayminQAQ](https://github.com/RayminQAQ)**
