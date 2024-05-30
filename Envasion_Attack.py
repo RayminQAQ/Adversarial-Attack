@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
 from model import ConvNet
-from utils import poison_labels
+from utils import NoisyDataset
      
 def loadDataset(dataset_root: str) -> ImageFolder:
     _transform = transforms.Compose([
@@ -202,7 +202,7 @@ def _drawHistogram(class_accuracies, path):
     plt.close()
     print(f"Class-wise accuracy histogram saved in {path}/class_accuracies_histogram.png")
 
-def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, target_label=0):
+def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise_level=0):
     # Initialize
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     history = {
@@ -217,10 +217,8 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, targe
     dataset = loadDataset(dataPath)
     train_set, test_set = splitDataset(dataset)
     
-    # Poison Attack
-    poison_labels(train_set, train_set.indices, poison_fraction=poison_fraction, target_label=target_label)
-    print(f"==========================================================")
-    print(f"Modify index({poison_fraction * 100}%) into: {target_label}")
+    # Envasion Attack
+    test_set = NoisyDataset(test_set, poison_fraction, noise_level)
     
     # Load 
     trainLoader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
@@ -263,14 +261,6 @@ if __name__ == '__main__':
     
     # For poison attack: poison_labels
     poison_fraction = 0.1
-    target_label = 0
+    noise_level = 0.1
     
-    main(dataPath, savedPath, batch_size, epoch_size, poison_fraction, target_label)  
-    
-    
-    """
-    不錯的參考資料：
-    1. 加载数据集（Dataset、DataLoader、Sampler）、pin_memory、num_workers
-    [Ref]: https://blog.csdn.net/weixin_43135178/article/details/124673732
-    
-    """  
+    main(dataPath, savedPath, batch_size, epoch_size, poison_fraction, noise_level)    
