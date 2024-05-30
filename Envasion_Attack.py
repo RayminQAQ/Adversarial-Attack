@@ -232,6 +232,7 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
     optimizer = optim.AdamW(model.parameters(), lr=0.001)
     
     # Train & Test
+    print(f"==========================================================")
     for round in range(1, epoch_size + 1):
         train_acc, train_loss = train(model, trainLoader, loss_fn, optimizer, round, DEVICE)
         test_acc, _histogram = test(model, testLoader, DEVICE)
@@ -255,9 +256,9 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, noise
 
 if __name__ == '__main__':
     dataPath = "image_fromTA"
-    savedPath = "history"
+    savedPath = "result_EnvAttack"
     batch_size = 32
-    epoch_size = 2
+    epoch_size = 20
     
     # For poison attack: poison_labels
     poison_fraction = 0.1
