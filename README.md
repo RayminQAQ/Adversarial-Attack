@@ -33,6 +33,8 @@ There are three piplines can use for machine learning training and testing:
 2. **Poison_Attack.py**: Based on Basic_pipline and add Poison Attack measure.
 3. **Envasion_Attack.py**: Based on Basic_pipline and add Envasion Attack measure.
 
+If you want to use our dataset, please unzip: **dataset.zip**
+
 ## Contributors
 - **[RayminQAQ](https://github.com/RayminQAQ)** 
 
