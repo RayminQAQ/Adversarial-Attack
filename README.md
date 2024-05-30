@@ -47,8 +47,3 @@ If you want to use our dataset, please unzip: **dataset.zip**
 - **[RayminQAQ](https://github.com/RayminQAQ)** 
 
 If there's any question, contact: B11132009@mail.ntust.edu.tw
-
-## Contributors
-- **[RayminQAQ](https://github.com/RayminQAQ)** 
-
-If there's any question, contact: B11132009@mail.ntust.edu.tw
