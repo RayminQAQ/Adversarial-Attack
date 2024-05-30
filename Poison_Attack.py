@@ -11,14 +11,14 @@ from torch.utils.data import DataLoader, random_split
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
-from model import ConvNet
+from model import ConvNetv2
 from utils import poison_labels
      
 def loadDataset(dataset_root: str) -> ImageFolder:
     _transform = transforms.Compose([
-        transforms.RandomResizedCrop(size=(28, 28), antialias=True),
-        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     return ImageFolder(dataset_root, transform=_transform)
 
@@ -32,7 +32,7 @@ def splitDataset(dataset) -> tuple:
     return train_set, test_set
 
 def makeModel(class_num, device):
-    model = ConvNet(class_num)
+    model = ConvNetv2(class_num)
     model.to(device)
     return model
 
@@ -54,13 +54,13 @@ def train(model, train_loader, loss_fn, optimizer, idx, device) -> tuple:  # Ret
         
         # Compute the loss
         loss = loss_fn(outputs, labels)
-        running_loss += loss.item()
         
         # Backward pass and optimize
         loss.backward()
         optimizer.step()
         
         # Compute the number of correct predictions
+        running_loss += loss.item()
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
@@ -263,7 +263,7 @@ if __name__ == '__main__':
     dataPath = "image_fromTA"
     savedPath = "result_posAttack"
     batch_size = 32
-    epoch_size = 2
+    epoch_size = 100
     
     # For poison attack: poison_labels
     poison_fraction = 0.1
