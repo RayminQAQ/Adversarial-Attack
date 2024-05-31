@@ -222,6 +222,9 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_count=40, source_la
     
     # Poison Attack
     poison_labels_byCount(train_set, train_set.indices, poison_count=poison_count, target_label=target_label, source_label=source_label)
+    
+    # Another way to implement Poison Attack
+    # poison_labels_byCount(train_set, train_set.indices, poison_count=poison_count, poison_fraction=?, target_label=?)
     print(f"==========================================================")
     
     # Load 
@@ -236,7 +239,6 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_count=40, source_la
     optimizer = optim.AdamW(model.parameters(), lr=0.001)
     
     # Train & Test
-    print(f"==========================================================")
     for round in range(1, epoch_size + 1):
         train_acc, train_loss = train(model, trainLoader, loss_fn, optimizer, round, DEVICE)
         test_acc, _histogram = test(model, testLoader, DEVICE)
