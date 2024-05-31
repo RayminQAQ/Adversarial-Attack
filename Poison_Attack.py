@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
 from model import ConvNetv2
-from utils import poison_labels
+from utils import poison_labels, poison_labels_byCount
      
 def loadDataset(dataset_root: str) -> ImageFolder:
     _transform = transforms.Compose([
@@ -205,7 +205,7 @@ def _drawHistogram(class_accuracies, path):
     plt.close()
     print(f"Class-wise accuracy histogram saved in {path}/class_accuracies_histogram.png")
 
-def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, target_label=0):
+def main(dataPath, savedPath, batch_size, epoch_size, poison_count=40, source_label=1, target_label=0):
     # Initialize
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     history = {
@@ -221,9 +221,8 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, targe
     train_set, test_set = splitDataset(dataset)
     
     # Poison Attack
-    poison_labels(train_set, train_set.indices, poison_fraction=poison_fraction, target_label=target_label)
+    poison_labels_byCount(train_set, train_set.indices, poison_count=poison_count, target_label=target_label, source_label=source_label)
     print(f"==========================================================")
-    print(f"Modify index({poison_fraction * 100}%) into: {target_label}")
     
     # Load 
     trainLoader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
@@ -260,16 +259,16 @@ def main(dataPath, savedPath, batch_size, epoch_size, poison_fraction=0.1, targe
                history=history, histogram_info=histogram)
 
 if __name__ == '__main__':
-    dataPath = "image_fromTA"
+    dataPath = "split_dataset"
     savedPath = "result_posAttack"
     batch_size = 32
-    epoch_size = 100
+    epoch_size = 10
     
     # For poison attack: poison_labels
-    poison_fraction = 0.1
+    poison_count = 50
     target_label = 0
-    
-    main(dataPath, savedPath, batch_size, epoch_size, poison_fraction, target_label)  
+    source_label = 1
+    main(dataPath, savedPath, batch_size, epoch_size, poison_count, source_label, target_label)  
     
     
     """

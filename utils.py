@@ -12,6 +12,20 @@ def poison_labels(dataset, indices, poison_fraction=0.1, target_label=0):
         dataset.dataset.targets[idx] = target_label
         print(f"Changed index {idx} from {original_label} to {target_label}")
 
+def poison_labels_byCount(dataset, indices, poison_count, source_label=1, target_label=0):
+    """ Poison a fraction of the dataset by changing the labels to a specific target label. """
+    count = 0
+    for idx in indices:
+        # Limit the count of modifications
+        if count == poison_count:
+            break
+        
+        # Modify label
+        original_label = dataset.dataset.targets[idx]  # Access the original dataset's targets
+        if dataset.dataset.targets[idx] == source_label:
+            dataset.dataset.targets[idx] = target_label
+            count += 1
+    print(f"Change {source_label} into {target_label} for {count} times")
 
 # add noise to images, by custom dataset
 class NoisyDataset(torch.utils.data.Dataset):
