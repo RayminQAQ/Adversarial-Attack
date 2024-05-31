@@ -39,6 +39,14 @@ def poison_labels_byCount(dataset, indices, poison_count, source_label=1, target
 
 
 # add noise to images, by custom dataset
+# FGSM attack code
+def fgsm_attack(image, epsilon, data_grad):
+    sign_data_grad = data_grad.sign()
+    perturbed_image = image + epsilon*sign_data_grad
+    perturbed_image = torch.clamp(perturbed_image, 0, 1)
+    return perturbed_image
+
+# simple attack code
 class NoisyDataset(torch.utils.data.Dataset):
     def __init__(self, base_dataset, fraction=0.1, noise_level=0.2):
         self.base_dataset = base_dataset
